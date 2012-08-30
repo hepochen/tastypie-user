@@ -7,7 +7,7 @@ class ApiKeyBackend(ModelBackend):
         if not username or not api_key:
             return None
         try:
-            return User.objects.get(username=username, api_key=api_key)
+            return User.objects.get(username=username, api_key__key=api_key)
         except User.DoesNotExist:
             return None
 
