@@ -13,6 +13,6 @@ setup(
         'tastypie_user',
         'tastypie_user.tests'],
     package_data={
-        'tastypie_user': ['templates/tastypie-user/*']},
+        'tastypie_user': ['templates/tastypie-user/email/*']},
     long_description="Please see README.me"
 )
