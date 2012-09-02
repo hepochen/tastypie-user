@@ -10,6 +10,9 @@ setup(
     author_email="hepochen@gmail.com",
     url="https://github.com/hepochen/",
     packages=[
-        'tastypie_user', ],
+        'tastypie_user',
+        'tastypie_user.tests'],
+    package_data={
+        'tastypie_user': ['templates/tastypie-user/*']},
     long_description="Please see README.me"
 )
