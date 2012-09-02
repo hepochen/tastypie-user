@@ -1,2 +1,13 @@
-.idea
 *.pyc
+.DS_Store
+*.idea
+_build
+.*.sw[po]
+*.egg-info
+dist
+build
+MANIFEST
+.buildinfo
+.tox
+.venv
+venv
