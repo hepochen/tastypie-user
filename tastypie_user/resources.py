@@ -43,6 +43,7 @@ def change_api_key(user):
     api_key.created = datetime_now()
     api_key.save()
 
+
 def change_password(user, new_password):
     if not user.is_authenticated():
         raise BadRequest('change password need login')
