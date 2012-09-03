@@ -19,7 +19,7 @@ Tastypie User
 	    )
 		
 ### config you user creation form
-In the setting.py, set your owner TASTYPIE_USER_USER_CREATION_FORM, default value is 'django.contrib.auth.forms.UserCreationForm' .
+In the setting.py, set your owner TASTYPIE_USER_CREATION_FORM, default value is 'django.contrib.auth.forms.UserCreationForm' .
 
 The Form is a validation when your client try to create a new user.
 
