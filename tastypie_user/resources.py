@@ -11,10 +11,11 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.hashers import UNUSABLE_PASSWORD
 from django.conf import settings
 from django.utils.http import base36_to_int
-from django.contrib.auth.models import User
 from tastypie.authorization import Authorization
-from tastypie_user.utils import lazy_import, datetime_now
+from django.utils.timezone import now as datetime_now
+from tastypie_user.utils import lazy_import
 from tastypie import http
+from tastypie_user.models import MyUser as User
 
 
 USER_CREATION_FORM = lazy_import(
@@ -24,6 +25,8 @@ USER_CREATION_FORM = lazy_import(
         'django.contrib.auth.forms.UserCreationForm'
     )
 )
+USER_CREATION_FORM._meta.model = User
+
 CAN_CHANGE_UNUSABLE_PASSWORD = getattr(
     settings,
     'CAN_CHANGE_UNUSABLE_PASSWORD',

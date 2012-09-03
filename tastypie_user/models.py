@@ -1,3 +1,4 @@
+"""add a proxy User which has a new magical function named send_email"""
 #coding:utf8
 import warnings
 from django.conf import settings
@@ -7,7 +8,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import int_to_base36
 
 
-class ExtendedUserMethods:  # (Users)
+class MyUser(User):
     def send_email(self, action_type, ctx_dict=None, from_email=None):
         ctx_dict = ctx_dict or {}
         ctx_dict.update({
@@ -25,5 +26,5 @@ class ExtendedUserMethods:  # (Users)
         subject, message, subtype = load_email_content(action_type, ctx_dict)
         send_email(subject, message, from_email, self.email, subtype)
 
-
-User.__bases__ += (ExtendedUserMethods, )
+    class Meta:
+        proxy = True

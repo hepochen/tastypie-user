@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-''' Setup File for backend '''
+"""setup file for tastypie-user"""
 from setuptools import setup
 
 setup(

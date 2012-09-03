@@ -1,5 +1,4 @@
 #coding:utf8
-import datetime
 import threading
 from django.template.loader import get_template, TemplateDoesNotExist
 from django.template import Context
@@ -13,11 +12,6 @@ TASTYPIE_USER_TEMPLATE_FOLDER = getattr(
     'TASTYPIE_USER_TEMPLATE_FOLDER',
     'tastypie-user'
 )
-
-try:
-    from django.utils.timezone import now as datetime_now
-except ImportError:
-    datetime_now = datetime.datetime.now
 
 
 def lazy_import(name):

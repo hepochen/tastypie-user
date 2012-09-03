@@ -209,6 +209,7 @@ class TastypieUserTest(TestCase):
 
     def test_get_keys(self):
         client, response = self.login()
+        self.check_status(response, 200)
         new_response = client.get(self.endpoint_uri + 'keys/')
         keys = json.loads(new_response.content)
         self.assertEqual(len(keys), 4, 'We can not get the 4 length keys')
@@ -281,6 +282,7 @@ class TastypieUserTest(TestCase):
         self.check_status(not_login_response, 400)
 
         client, response = self.login()
+        self.check_status(response, 200)
         login_response = client.patch(
             self.endpoint_uri + 'me/',
             data={
