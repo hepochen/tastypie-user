@@ -7,6 +7,7 @@ from django.contrib.sessions.models import Session
 from django.contrib.auth.tokens import default_token_generator
 from django.db.models.signals import post_save
 from tastypie.models import create_api_key
+from django.utils.http import int_to_base36
 
 post_save.connect(create_api_key, sender=User)
 
@@ -23,11 +24,11 @@ class TastypieUserTest(TestCase):
 
     def setUp(self):
         user = User(
-            username='test',
+            username='hepochen',
             email='hepochen@gmail.com',
             first_name='Hepo',
             last_name='Chen')
-        user.set_password('test')
+        user.set_password('test_password')
         user.save()
         self.user = user
         self.users_count = User.objects.count()
@@ -52,7 +53,7 @@ class TastypieUserTest(TestCase):
             data={
                 "type": "login",
                 "username": self.user.username,
-                "password": "test",
+                "password": "test_password",
                 "expiry_seconds": 0})
         return client, response
 
@@ -91,8 +92,8 @@ class TastypieUserTest(TestCase):
                 "type": "register",
                 "username": 'hello',
                 "email": "hepo@ued.com.cn",
-                "password1": "world",
-                "password2": "world"
+                "password1": "world_password",
+                "password2": "world_password"
             }
         )
 
@@ -100,10 +101,10 @@ class TastypieUserTest(TestCase):
         self.check_register(
             data={
                 "type": "register",
-                "username": 'test',
+                "username": 'hepochen',
                 "email": "hepo@ued.com.cn",
-                "password1": "world",
-                "password2": "world"
+                "password1": "world_password",
+                "password2": "world_password"
             },
             error_field='username'
         )
@@ -114,10 +115,22 @@ class TastypieUserTest(TestCase):
                 "type": "register",
                 "username": 'hello',
                 "email": "hepo@ued.com.cn",
-                "password1": "world",
-                "password2": "world2"
+                "password1": "world_password",
+                "password2": "world_password2"
             },
             error_field='password2'
+        )
+
+    def test_register_error_password_length(self):
+        self.check_register(
+            data={
+                "type": "register",
+                "username": 'hello',
+                "email": "hepo@ued.com.cn",
+                "password1": "world",
+                "password2": "world"
+            },
+            error_field='password1'
         )
 
     def test_login_with_username(self):
@@ -125,7 +138,7 @@ class TastypieUserTest(TestCase):
             data={
                 "type": "login",
                 "username": self.user.username,
-                "password": "test",
+                "password": "test_password",
                 "expiry_seconds": 0}
         )
 
@@ -143,7 +156,7 @@ class TastypieUserTest(TestCase):
             data={
                 "type": "login",
                 "email": self.user.email,
-                "password": "test",
+                "password": "test_password",
                 "expiry_seconds": 0
             }
         )
@@ -256,7 +269,7 @@ class TastypieUserTest(TestCase):
             self.endpoint_uri + 'me/',
             data={
                 'action': 'reset_password',
-                'uid': '1',
+                'uid': int_to_base36(self.user.id),
                 'token': default_token_generator.make_token(self.user),
                 'new_password': 'new_password'
             }

@@ -22,7 +22,7 @@ USER_CREATION_FORM = lazy_import(
     getattr(
         settings,
         'TASTYPIE_USER_CREATION_FORM',
-        'django.contrib.auth.forms.UserCreationForm'
+        'tastypie_user.forms.UserCreationForm'
     )
 )
 USER_CREATION_FORM._meta.model = User
