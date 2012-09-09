@@ -21,6 +21,8 @@ def is_login_by_session(session_key):
 class TastypieUserTest(TestCase):
     endpoint_uri = '/api/v1/user/'
     resource_name = 'user'
+    me_name = 'me'
+    me_name_uri = '%s/' % me_name
 
     def setUp(self):
         user = User(
@@ -236,7 +238,7 @@ class TastypieUserTest(TestCase):
 
     def test_request_reset_password(self):
         response = self.api_client.patch(
-            self.endpoint_uri + 'me/',
+            self.endpoint_uri + 'self.me_name_uri',
             data={
                 'action': 'request_reset_password',
                 'email': self.user.email
@@ -246,7 +248,7 @@ class TastypieUserTest(TestCase):
 
         #without email
         response = self.api_client.patch(
-            self.endpoint_uri + 'me/',
+            self.endpoint_uri + self.me_name_uri,
             data={
                 'action': 'request_reset_password'
             }
@@ -255,7 +257,7 @@ class TastypieUserTest(TestCase):
 
         #with error_email
         response = self.api_client.patch(
-            self.endpoint_uri + 'me/',
+            self.endpoint_uri + self.me_name_uri,
             data={
                 'action': 'request_reset_password',
                 'email': 'error' + self.user.email
@@ -266,7 +268,7 @@ class TastypieUserTest(TestCase):
     def test_reset_password(self):
         old_api_key = self.user.api_key.key
         response = self.api_client.patch(
-            self.endpoint_uri + 'me/',
+            self.endpoint_uri + self.me_name_uri,
             data={
                 'action': 'reset_password',
                 'uid': int_to_base36(self.user.id),
@@ -286,7 +288,7 @@ class TastypieUserTest(TestCase):
 
     def test_change_password(self):
         not_login_response = self.api_client.patch(
-            self.endpoint_uri + 'me/',
+            self.endpoint_uri + self.me_name_uri,
             data={
                 'action': 'change_password',
                 'new_password': 'new_password'
@@ -297,7 +299,7 @@ class TastypieUserTest(TestCase):
         client, response = self.login()
         self.check_status(response, 200)
         login_response = client.patch(
-            self.endpoint_uri + 'me/',
+            self.endpoint_uri + self.me_name_uri,
             data={
                 'action': 'change_password',
                 'new_password': 'new_password'
@@ -313,7 +315,7 @@ class TastypieUserTest(TestCase):
         self.user.is_active = False
         self.user.save()
         response = self.api_client.patch(
-            self.endpoint_uri + 'me/',
+            self.endpoint_uri + self.me_name_uri,
             data={
                 'action': 're_activate',
                 'username': self.user.username
@@ -325,7 +327,7 @@ class TastypieUserTest(TestCase):
         self.user.is_active = True
         self.user.save()
         response = self.api_client.patch(
-            self.endpoint_uri + 'me/',
+            self.endpoint_uri + self.me_name_uri,
             data={
                 'action': 're_activate',
                 'username': self.user.username
