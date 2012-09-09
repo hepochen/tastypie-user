@@ -238,7 +238,7 @@ class TastypieUserTest(TestCase):
 
     def test_request_reset_password(self):
         response = self.api_client.patch(
-            self.endpoint_uri + 'self.me_name_uri',
+            self.endpoint_uri + self.me_name_uri,
             data={
                 'action': 'request_reset_password',
                 'email': self.user.email
