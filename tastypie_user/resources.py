@@ -106,6 +106,8 @@ class UserResource(ModelResource):
                 if expiry_seconds:
                     request.session.set_expiry(int(expiry_seconds))
                 self.show_keys(request)
+            elif user is not None and not user.is_active:
+                raise BadRequest('not active')
             else:
                 raise BadRequest('login error')
 

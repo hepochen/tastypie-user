@@ -128,12 +128,12 @@ We thought this is a way to update the user resource, so you need to PATCH it.
 	)
 btw, the endpoint '/user/anything/' also works, but '/user/me/' looks natural.
 
-This request will get a on content responce, but a reset password mail is sent to the email address. uid(in base36 format) & token is neccessary in the mail. And the two thinng is passed to email content template automaticly.
+This request will get a no content response, but a reset password mail is sent to the email address. uid(in base36 format) & token is necessary in the mail. And the two things is passed to email content template automaticly.
 
 What's more, the token will be timeout in 3 days defaultly. but you can config it in your settings.py, the config is PASSWORD_RESET_TIMEOUT_DAYS.
 
 ### Reset Password
-The uid and token is passing throught email, but your client (user) should input the new password.
+The uid and token is passing through email, but your client (user) should input the new password.
 
 It will return the keys, because the api_key will be changed when password is changed.
 
