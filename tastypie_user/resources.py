@@ -83,6 +83,7 @@ class UserResource(ModelResource):
 
     def obj_create(self, bundle, request=None, **kwargs):
         create_type = bundle.data.pop('type', 'register')
+        request = bundle.request
 
         if create_type == 'register':
             form = USER_CREATION_FORM(bundle.data)
