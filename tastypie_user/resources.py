@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from tastypie.exceptions import ImmediateHttpResponse, BadRequest
 from tastypie.resources import ModelResource
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.hashers import UNUSABLE_PASSWORD
+from django.contrib.auth.hashers import UNUSABLE_PASSWORD_PREFIX
 from django.conf import settings
 from django.utils.http import base36_to_int
 from tastypie.authorization import Authorization
@@ -51,7 +51,7 @@ def change_password(user, new_password):
     if not user.is_authenticated():
         raise BadRequest('change password need login')
 
-    if new_password == UNUSABLE_PASSWORD and not CAN_CHANGE_UNUSABLE_PASSWORD:
+    if new_password.startswith(UNUSABLE_PASSWORD_PREFIX) and not CAN_CHANGE_UNUSABLE_PASSWORD:
         raise BadRequest('not allowed to change blank password')
 
     if new_password and len(new_password) < MIN_PASSWORD_LENGTH:
