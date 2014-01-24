@@ -175,7 +175,7 @@ class UserResource(ModelResource):
         else:
             raise BadRequest('can not modify info of other user')
 
-    def obj_delete(self, request=None, **kwargs):
+    def obj_delete(self, bundle, **kwargs):
         delete_type = kwargs.get('pk')
         request = bundle.request
 
