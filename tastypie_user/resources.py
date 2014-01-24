@@ -96,7 +96,7 @@ class UserResource(ModelResource):
             else:
                 #output the errors for tatstypie
                 bundle.errors[self._meta.resource_name] = form.errors
-                self.error_response(request, form.errors)
+                raise ImmediateHttpResponse(self.error_response(request, bundle.errors))
 
         elif create_type == 'login':
             expiry_seconds = bundle.data.pop('expiry_seconds', None)
