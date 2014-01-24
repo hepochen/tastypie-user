@@ -177,6 +177,7 @@ class UserResource(ModelResource):
 
     def obj_delete(self, request=None, **kwargs):
         delete_type = kwargs.get('pk')
+        request = bundle.request
 
         if not request.user.is_authenticated():
             raise BadRequest('delete a resource, you should login first')
