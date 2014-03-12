@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from tastypie.exceptions import ImmediateHttpResponse, BadRequest
 from tastypie.resources import ModelResource
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.hashers import UNUSABLE_PASSWORD
+from django.contrib.auth.hashers import UNUSABLE_PASSWORD_PREFIX
 from django.conf import settings
 from django.utils.http import base36_to_int
 from tastypie.authorization import Authorization
@@ -51,7 +51,7 @@ def change_password(user, new_password):
     if not user.is_authenticated():
         raise BadRequest('change password need login')
 
-    if new_password == UNUSABLE_PASSWORD and not CAN_CHANGE_UNUSABLE_PASSWORD:
+    if new_password.startswith(UNUSABLE_PASSWORD_PREFIX) and not CAN_CHANGE_UNUSABLE_PASSWORD:
         raise BadRequest('not allowed to change blank password')
 
     if new_password and len(new_password) < MIN_PASSWORD_LENGTH:
@@ -83,6 +83,7 @@ class UserResource(ModelResource):
 
     def obj_create(self, bundle, request=None, **kwargs):
         create_type = bundle.data.pop('type', 'register')
+        request = bundle.request
 
         if create_type == 'register':
             form = USER_CREATION_FORM(bundle.data)
@@ -95,7 +96,7 @@ class UserResource(ModelResource):
             else:
                 #output the errors for tatstypie
                 bundle.errors[self._meta.resource_name] = form.errors
-                self.error_response(bundle.errors, request)
+                raise ImmediateHttpResponse(self.error_response(request, bundle.errors))
 
         elif create_type == 'login':
             expiry_seconds = bundle.data.pop('expiry_seconds', None)
@@ -174,8 +175,9 @@ class UserResource(ModelResource):
         else:
             raise BadRequest('can not modify info of other user')
 
-    def obj_delete(self, request=None, **kwargs):
+    def obj_delete(self, bundle, **kwargs):
         delete_type = kwargs.get('pk')
+        request = bundle.request
 
         if not request.user.is_authenticated():
             raise BadRequest('delete a resource, you should login first')
